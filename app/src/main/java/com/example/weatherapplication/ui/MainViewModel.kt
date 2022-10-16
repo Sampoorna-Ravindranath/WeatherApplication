@@ -21,11 +21,7 @@ class MainViewModel @Inject constructor(
     private val _weatherData = MutableLiveData<Resource<WeatherResponseModel>>()
     val weatherData: LiveData<Resource<WeatherResponseModel>> get() = _weatherData
 
-    init {
-        fetchWeatherData(city = "delhi")
-    }
-
-    private fun fetchWeatherData(city:String) {
+    fun fetchWeatherData(city: String) {
         viewModelScope.launch {
             _weatherData.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
