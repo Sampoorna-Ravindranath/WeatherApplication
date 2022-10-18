@@ -12,4 +12,5 @@ interface ApiService {
         @Query("q") city: String,
         @Query("appid") api_key: String = "d418b560899fa9f2311b6b1c76926af8"
     ): Response<WeatherResponseModel>
+
 }

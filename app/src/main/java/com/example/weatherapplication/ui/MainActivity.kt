@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ActivityMainBinding
-import com.example.weatherapplication.utils.Status
+import com.example.weatherapplication.utils.Result
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,43 +28,45 @@ class MainActivity : AppCompatActivity() {
                 binding.edtCity.error = "Please enter a city"
         }
 
-        mainViewModel.weatherData.observe(this) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it.data?.let { weatherResponse ->
-                        if (weatherResponse.main != null) {
+        mainViewModel.response.observe(this) { response ->
+            when (response) {
+                is Result.Success -> {
+                    response.data?.let {
+                        if (it.main != null) {
                             binding.tempLayout.visibility = View.VISIBLE
                             binding.tvTemp.text =
-                                getString(R.string.temp, weatherResponse.main!!.temp!!.toString())
+                                getString(R.string.temp, it.main!!.temp!!.toString())
                             binding.tvTempMin.text = getString(
                                 R.string.temp_min,
-                                weatherResponse.main!!.tempMin!!.toString()
+                                it.main!!.tempMin!!.toString()
                             )
                             binding.tvTempMax.text = getString(
                                 R.string.temp_max,
-                                weatherResponse.main!!.tempMax!!.toString()
+                                it.main!!.tempMax!!.toString()
                             )
                             binding.tvPressure.text = getString(
                                 R.string.pressure,
-                                weatherResponse.main!!.pressure!!.toString()
+                                it.main!!.pressure!!.toString()
                             )
                             binding.tvHumidity.text = getString(
                                 R.string.humidity,
-                                weatherResponse.main!!.humidity!!.toString()
+                                it.main!!.humidity!!.toString()
                             )
-                        } else {
-                            binding.tempLayout.visibility = View.GONE
                         }
                     }
                 }
-                Status.ERROR -> {
+                is Result.Error -> {
                     binding.tempLayout.visibility = View.GONE
-                    Toast.makeText(this, "Not found!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        response.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 else -> {}
             }
         }
+
+
     }
-
-
 }
