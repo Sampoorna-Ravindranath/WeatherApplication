@@ -21,6 +21,6 @@ abstract class BaseApiResponse {
     }
 
     private fun <T> error(errorMessage: String): Result<T> =
-        Result.Error("Api call failed : $errorMessage")
+        Result.Error(errorMessage)
 
 }

@@ -22,10 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnSearch.setOnClickListener {
-            if (binding.edtCity.text.toString().trim().isNotEmpty())
-                mainViewModel.fetchWeatherData(binding.edtCity.text.toString().trim())
-            else
-                binding.edtCity.error = "Please enter a city"
+            mainViewModel.fetchWeatherData(binding.edtCity.text.toString().trim())
         }
 
         mainViewModel.response.observe(this) { response ->
@@ -66,7 +63,5 @@ class MainActivity : AppCompatActivity() {
                 else -> {}
             }
         }
-
-
     }
 }
