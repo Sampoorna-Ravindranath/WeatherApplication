@@ -6,8 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapplication.data.model.WeatherResponseModel
 import com.example.weatherapplication.data.repository.MainRepository
-import com.example.weatherapplication.utils.NetworkHelper
-import com.example.weatherapplication.utils.Resource
+import com.example.weatherapplication.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,26 +14,14 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository,
-    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
-    private val _weatherData = MutableLiveData<Resource<WeatherResponseModel>>()
-    val weatherData: LiveData<Resource<WeatherResponseModel>> get() = _weatherData
+    private val _response: MutableLiveData<Result<WeatherResponseModel>> = MutableLiveData()
+    val response: LiveData<Result<WeatherResponseModel>> = _response
 
-    init {
-        fetchWeatherData(city = "delhi")
-    }
-
-    private fun fetchWeatherData(city:String) {
-        viewModelScope.launch {
-            _weatherData.postValue(Resource.loading(null))
-            if (networkHelper.isNetworkConnected()) {
-                mainRepository.getWeatherData(city = city).let {
-                    if (it.isSuccessful) {
-                        _weatherData.postValue(Resource.success(it.body()))
-                    } else _weatherData.postValue(Resource.error(it.errorBody().toString(), null))
-                }
-            } else _weatherData.postValue(Resource.error("No internet connection", null))
+    fun fetchWeatherData(city: String) = viewModelScope.launch {
+        mainRepository.getWeatherData(city = city).collect { values ->
+            _response.value = values
         }
     }
 }
