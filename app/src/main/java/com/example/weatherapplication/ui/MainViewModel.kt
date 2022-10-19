@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val weatherUseCase: WeatherUseCase
+    private val weatherUseCase: WeatherUseCase,
 ) : ViewModel() {
 
     private val _response: MutableLiveData<Result<WeatherResponseModel>> = MutableLiveData()
@@ -22,8 +22,8 @@ class MainViewModel @Inject constructor(
     fun fetchWeatherData(city: String) = viewModelScope.launch {
 
         if (city.isNotEmpty()) {
-            weatherUseCase.invoke(city = city).collect { values ->
-                _response.value = values
+            weatherUseCase.execute(WeatherUseCase.Params.create(city)).collect {
+                _response.value = it
             }
         } else {
             _response.value = Result.Error("Please enter city.", null)

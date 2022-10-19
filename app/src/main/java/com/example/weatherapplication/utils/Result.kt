@@ -1,9 +1,6 @@
 package com.example.weatherapplication.utils
 
-sealed class Result<T>(
-    val data: T? = null,
-    val message: String? = null
-) {
+sealed class Result<T>(val data: T? = null, val message: String? = null) {
 
     class Success<T>(data: T) : Result<T>(data)
 
