@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui
+package com.example.weatherapplication.ui.view
 
 import android.os.Bundle
 import android.view.View
@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ActivityMainBinding
+import com.example.weatherapplication.ui.viewmodel.MainViewModel
 import com.example.weatherapplication.utils.Result
 import dagger.hilt.android.AndroidEntryPoint
 
